@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Veil</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="popup-logo">Veil</div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <!-- Tab Header -->
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="presets" id="presetsTabBtn">
+          <span>프리셋</span>
+          <span class="tab-count" id="presetsCount">(0)</span>
+        </button>
+        <button class="tab-btn" data-tab="elements" id="elementsTabBtn">
+          <span>숨김 요소</span>
+          <span class="tab-count" id="elementsCount">(0)</span>
+        </button>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        <!-- Presets Tab -->
+        <div class="tab-pane active" id="presetsTab">
+          <div class="section">
+            <div class="section-header">
+              <button class="btn-primary" id="addPresetBtn">+ 새 프리셋</button>
+            </div>
+            <div id="presetList" class="preset-list">
+              <!-- Preset cards will be inserted here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Elements Tab -->
+        <div class="tab-pane" id="elementsTab">
+          <div class="section">
+            <div id="elementList" class="element-list">
+              <!-- Block element items will be inserted here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Footer -->
+    <footer class="popup-footer">
+      <button class="btn-footer" id="addElementBtn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M2 8h12M8 2v12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>요소 선택</span>
+      </button>
+    </footer>
+  </div>
+
+  <!-- Element Save Modal -->
+  <div class="modal-overlay" id="elementSaveModal" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">숨김 요소 추가</h3>
+        <button class="btn-icon" id="closeElementModalBtn" aria-label="닫기">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Element Name -->
+        <div class="form-group">
+          <label class="form-label">이름</label>
+          <input
+            type="text"
+            class="input"
+            id="elementNameInput"
+            placeholder="유튜브 쇼츠 섹션"
+          />
+        </div>
+
+        <!-- URL Pattern Selection -->
+        <div class="form-group">
+          <label class="form-label">적용 범위</label>
+          <div class="radio-group">
+            <label class="radio-option selected">
+              <div class="radio-label">
+                <input type="radio" name="urlPattern" value="site_wide" class="radio-input" checked />
+                <div class="radio-text">
+                  <div class="radio-title">이 사이트 전체</div>
+                  <div class="radio-desc" id="siteWidePattern">youtube.com</div>
+                </div>
+              </div>
+            </label>
+
+            <label class="radio-option">
+              <div class="radio-label">
+                <input type="radio" name="urlPattern" value="path_pattern" class="radio-input" />
+                <div class="radio-text">
+                  <div class="radio-title">이 경로에서만</div>
+                  <div class="radio-desc" id="pathPattern">youtube.com/watch*</div>
+                </div>
+              </div>
+            </label>
+
+            <label class="radio-option">
+              <div class="radio-label">
+                <input type="radio" name="urlPattern" value="exact_page" class="radio-input" />
+                <div class="radio-text">
+                  <div class="radio-title">이 페이지만</div>
+                  <div class="radio-desc" id="exactPagePattern">youtube.com/watch?v=...</div>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Selected Element Info -->
+        <div class="form-group">
+          <label class="form-label">선택된 요소</label>
+          <div class="selected-element" id="selectedElementInfo">
+            ytd-reel-shelf-renderer
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn" id="cancelElementBtn">취소</button>
+        <button class="btn-primary" id="saveElementBtn">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preset Create Modal -->
+  <div class="modal-overlay" id="presetCreateModal" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">새 프리셋</h3>
+        <button class="btn-icon" id="closePresetModalBtn" aria-label="닫기">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Preset Name -->
+        <div class="form-group">
+          <label class="form-label">이름</label>
+          <input
+            type="text"
+            class="input"
+            id="presetNameInput"
+            placeholder="공부 모드"
+          />
+        </div>
+
+        <!-- Block Element Selection -->
+        <div class="form-group">
+          <label class="form-label">포함할 요소</label>
+          <div class="checkbox-list" id="presetElementList">
+            <!-- Checkbox items will be inserted here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn" id="cancelPresetBtn">취소</button>
+        <button class="btn-primary" id="savePresetBtn">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../shared/constants.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

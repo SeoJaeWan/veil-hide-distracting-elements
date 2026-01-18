@@ -1,0 +1,186 @@
+/**
+ * Content Script 스타일 - Monochrome Design
+ *
+ * - .veil-hidden: 요소 숨김 스타일
+ * - Element Picker UI: 배너, 하이라이트, Tooltip
+ *
+ * Design Philosophy:
+ * - Invisible: 존재감을 드러내지 않는 조용한 UI
+ * - Monochrome: 흑백 기반, 색상은 최소한으로
+ * - Content-first: 장식보다 콘텐츠와 기능에 집중
+ * - Familiar: Notion처럼 이미 익숙한 패턴 활용
+ */
+
+/* =============================================================================
+   CSS Variables (from design.md - Monochrome)
+   ============================================================================= */
+
+:root {
+  /* Background */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7f5; /* Notion의 시그니처 베이지-그레이 */
+  --bg-tertiary: #efefef;
+  --bg-hover: rgba(55, 53, 47, 0.08);
+  --bg-active: rgba(55, 53, 47, 0.16);
+
+  /* Text */
+  --text-primary: #37352f; /* Notion 메인 텍스트 */
+  --text-secondary: #6b6b6b;
+  --text-muted: #9b9a97;
+
+  /* Border */
+  --border-default: #e3e2df;
+  --border-strong: #d3d1cb;
+
+  /* Font */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans',
+    Helvetica, Arial, sans-serif;
+  --font-mono: 'SFMono-Regular', Menlo, Consolas, 'PT Mono', monospace;
+
+  /* Border Radius */
+  --radius-sm: 3px;
+  --radius-md: 5px;
+
+  /* Shadow - subtle */
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  /* Animation */
+  --duration-fast: 100ms;
+  --duration-normal: 150ms;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* =============================================================================
+   요소 숨김
+   ============================================================================= */
+
+/**
+ * 숨김 요소 스타일
+ */
+.veil-hidden {
+  display: none !important;
+}
+
+/* =============================================================================
+   Element Picker - Top Banner
+   ============================================================================= */
+
+/**
+ * Picker 모드 안내 배너
+ * Design: 흰색 배경 + 하단 border (Monochrome)
+ * Z-index: 최대값 (2147483647) - 모든 요소보다 위에 표시
+ * Animation: slideDown 150ms ease-out
+ */
+.veil-picker-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2147483647;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-default);
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-sans);
+  box-shadow: var(--shadow-md);
+  animation: veil-slide-down var(--duration-normal) var(--ease-out);
+}
+
+/**
+ * 배너 안내 텍스트
+ */
+.veil-picker-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+/**
+ * ESC 키 안내 버튼
+ * Design: 베이지-그레이 배경, monospace 폰트
+ */
+.veil-picker-esc {
+  padding: 4px 8px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.veil-picker-esc:hover {
+  background: var(--bg-tertiary);
+}
+
+/* =============================================================================
+   Element Picker - Highlight
+   ============================================================================= */
+
+/**
+ * 선택 가능한 요소 하이라이트
+ * Design: 검정색 점선 outline (Monochrome)
+ * Outline: 2px dashed 검정색, 2px offset
+ * Background: 없음 (점선만)
+ * Cursor: crosshair
+ * !important: 웹사이트 스타일 오버라이드
+ */
+.veil-picker-highlight {
+  outline: 2px dashed var(--text-primary) !important;
+  outline-offset: 2px !important;
+  cursor: crosshair !important;
+}
+
+/* =============================================================================
+   Element Picker - Tooltip
+   ============================================================================= */
+
+/**
+ * 요소 정보 Tooltip
+ * Design: 흰색 배경 + border (Monochrome)
+ * Position: fixed (커서 따라다님)
+ * Z-index: 최대값 (2147483647)
+ * Max-width: 250px (작고 심플하게)
+ */
+.veil-picker-tooltip {
+  position: fixed;
+  z-index: 2147483647;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =============================================================================
+   Animations
+   ============================================================================= */
+
+/**
+ * 슬라이드 다운 애니메이션
+ * Duration: 150ms (빠르고 가볍게)
+ * Easing: cubic-bezier(0, 0, 0.2, 1) (ease-out)
+ */
+@keyframes veil-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
