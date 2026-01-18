@@ -6,8 +6,6 @@
 
   "permissions": ["storage", "activeTab", "scripting", "sidePanel"],
 
-  "host_permissions": ["<all_urls>"],
-
   "action": {
     "default_title": "Open Veil Side Panel"
   },
